@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>체크인 안내 | Guesthouse Queen Creek</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #f8f5f0;
+    --charcoal: #1e1e1e;
+    --warm-gray: #8a8278;
+    --gold: #b8975a;
+    --gold-light: #d4b07a;
+    --white: #ffffff;
+    --border: rgba(184,151,90,0.25);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+
+  nav {
+    background: rgba(30,30,30,0.96);
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 300;
+    letter-spacing: 0.18em; color: var(--gold-light);
+    text-transform: uppercase; text-decoration: none;
+  }
+  .nav-back { font-size: 0.75rem; color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+  .nav-back:hover { color: var(--gold-light); }
+
+  .hero {
+    background: var(--charcoal);
+    padding: 56px 32px 48px; text-align: center;
+  }
+  .hero-label { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; color: var(--white); line-height: 1.15; }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { margin-top: 14px; font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .info-card {
+    background: var(--white);
+    border: 1px solid rgba(30,30,30,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .info-card-header {
+    background: var(--charcoal);
+    padding: 16px 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .info-card-icon { font-size: 1.4rem; }
+  .info-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 400;
+    color: var(--white);
+  }
+  .info-card-body { padding: 24px; }
+
+  .info-row {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(30,30,30,0.07);
+  }
+  .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .info-key {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--warm-gray); min-width: 90px;
+  }
+  .info-val { font-size: 0.92rem; color: var(--charcoal); line-height: 1.6; flex: 1; }
+  .info-val strong { color: var(--gold); font-weight: 600; font-size: 1.05rem; }
+  .info-val .highlight {
+    display: inline-block;
+    background: rgba(184,151,90,0.1);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--charcoal);
+    margin-top: 4px;
+  }
+
+  /* 긴급 연락처 카드 */
+  .emergency-card {
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .emergency-header {
+    background: #c0392b;
+    padding: 16px 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .emergency-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 400; color: var(--white);
+  }
+  .emergency-body { padding: 24px; }
+  .emergency-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .emergency-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .emergency-label { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+  .emergency-number {
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--gold-light); letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .emergency-number:hover { color: var(--white); }
+  .emergency-911 { font-size: 1.4rem; color: #ff6b6b; font-weight: 700; }
+
+  .tip-box {
+    background: rgba(184,151,90,0.08);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: var(--warm-gray);
+    line-height: 1.6;
+  }
+
+  .kakao-btn {
+    display: block; width: 100%; padding: 14px;
+    background: #FEE500; color: #000; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; text-align: center; text-decoration: none; margin-top: 24px;
+  }
+
+  @media (max-width: 480px) {
+    .info-key { min-width: 70px; font-size: 0.68rem; }
+  }
+</style>
+</head>
+<body>
+<style>
+  .pw-overlay {
+    position: fixed; inset: 0;
+    background: #f8f5f0;
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 20px;
+  }
+  .pw-box { text-align: center; }
+  .pw-logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; letter-spacing: 0.18em; color: #b8975a; text-transform: uppercase; margin-bottom: 32px; }
+  .pw-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: #1e1e1e; margin-bottom: 8px; }
+  .pw-sub { font-size: 0.82rem; color: #8a8278; margin-bottom: 28px; }
+  .pw-input {
+    width: 220px; padding: 12px 18px;
+    border: 1.5px solid rgba(184,151,90,0.4);
+    background: #fff;
+    color: #1e1e1e; font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem; letter-spacing: 0.2em;
+    text-align: center; outline: none;
+    display: block; margin: 0 auto 14px;
+  }
+  .pw-input:focus { border-color: #b8975a; }
+  .pw-btn {
+    width: 220px; padding: 12px;
+    background: #b8975a; color: #fff; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .pw-btn:hover { background: #fff; color: #1e1e1e; }
+  .pw-error { font-size: 0.78rem; color: #ff6b6b; margin-top: 10px; display: none; }
+</style>
+
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-logo">Guesthouse · Queen Creek</div>
+    <div class="pw-title">게스트 전용 페이지</div>
+    <div class="pw-sub">비밀번호를 입력해 주세요</div>
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••" maxlength="10" onkeydown="if(event.key==='Enter') checkPw()">
+    <button class="pw-btn" onclick="checkPw()">입장하기</button>
+    <div class="pw-error" id="pwError">비밀번호가 틀렸어요 🔒</div>
+  </div>
+</div>
+<script>
+  (function() {
+    if (sessionStorage.getItem('guesthouse_auth') === 'ok') {
+      document.getElementById('pwOverlay').style.display = 'none';
+    }
+  })();
+  function checkPw() {
+    const val = document.getElementById('pwInput').value;
+    if (val === '5474') {
+      sessionStorage.setItem('guesthouse_auth', 'ok');
+      document.getElementById('pwOverlay').style.display = 'none';
+    } else {
+      document.getElementById('pwError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  }
+</script>
+
+
+<nav>
+  <a href="index.html" class="nav-logo">Guesthouse · Queen Creek</a>
+  <a href="index.html" class="nav-back">← 홈으로</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Check-in Guide</div>
+  <h1 class="hero-title">체크인 안내<br><em>편하게 머무세요</em></h1>
+  <p class="hero-sub">입실에 필요한 모든 정보를 안내해 드려요 😊</p>
+</div>
+
+<div class="container">
+
+  <!-- 와이파이 -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-icon">📶</div>
+      <div class="info-card-title">와이파이 정보</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-row">
+        <div class="info-key">네트워크</div>
+        <div class="info-val"><span class="highlight">Byun</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-key">비밀번호</div>
+        <div class="info-val"><span class="highlight">byun5474</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 도어락 -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-icon">🔐</div>
+      <div class="info-card-title">열쇠 / 도어락</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-row">
+        <div class="info-key">도어락 번호</div>
+        <div class="info-val"><span class="highlight">5474</span></div>
+      </div>
+      <div class="tip-box">
+        💡 번호 입력 후 ✱ 또는 # 버튼을 눌러주세요. 외출 시 문이 잠겼는지 꼭 확인해 주세요!
+      </div>
+    </div>
+  </div>
+
+  <!-- 주차 -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-icon">🚗</div>
+      <div class="info-card-title">주차 안내</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-row">
+        <div class="info-key">주차 가능</div>
+        <div class="info-val">🏠 차고 (Garage) · 앞 드라이브웨이 (Driveway)</div>
+      </div>
+      <div class="tip-box">
+        💡 차고 또는 집 앞 드라이브웨이에 주차하시면 돼요. 길가 주차는 피해주세요.
+      </div>
+    </div>
+  </div>
+
+  <!-- 쓰레기 -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-icon">🗑️</div>
+      <div class="info-card-title">쓰레기 수거일</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-row">
+        <div class="info-key">수거일</div>
+        <div class="info-val"><strong>매주 수요일</strong> 오전</div>
+      </div>
+      <div class="info-row">
+        <div class="info-key">내놓는 시간</div>
+        <div class="info-val">화요일 밤에 길가에 내놔주세요</div>
+      </div>
+      <div class="tip-box">
+        💡 화요일 밤에 쓰레기통을 길가(커브)에 내놓으시고, 수요일 수거 후 다시 집 안으로 넣어주세요.
+      </div>
+    </div>
+  </div>
+
+  <!-- 세탁기 -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-icon">🧺</div>
+      <div class="info-card-title">세탁기 사용법</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-row">
+        <div class="info-key">안내</div>
+        <div class="info-val">세탁기 사용법은 곧 추가될 예정이에요 😊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 긴급 연락처 -->
+  <div class="emergency-card">
+    <div class="emergency-header">
+      <div class="info-card-icon">🚨</div>
+      <div class="emergency-title">긴급 연락처</div>
+    </div>
+    <div class="emergency-body">
+      <div class="emergency-row">
+        <div class="emergency-label">🚑 응급 (Emergency)</div>
+        <a href="tel:911" class="emergency-number emergency-911">911</a>
+      </div>
+      <div class="emergency-row">
+        <div class="emergency-label">👩 숙소 담당자</div>
+        <a href="tel:4699991435" class="emergency-number">469-999-1435</a>
+      </div>
+      <div class="emergency-row">
+        <div class="emergency-label">💬 카카오톡 문의</div>
+        <a href="https://open.kakao.com/o/srZ7luki" target="_blank" class="emergency-number">오픈채팅 바로가기</a>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://open.kakao.com/o/srZ7luki" target="_blank" class="kakao-btn">💬 추가 문의는 카카오톡 오픈채팅으로</a>
+
+</div>
+</body>
+</html>

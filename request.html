@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>필요한 것 요청하기 | Guesthouse Queen Creek</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #f8f5f0;
+    --charcoal: #1e1e1e;
+    --warm-gray: #8a8278;
+    --gold: #b8975a;
+    --gold-light: #d4b07a;
+    --white: #ffffff;
+    --border: rgba(184,151,90,0.25);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+  nav {
+    background: rgba(30,30,30,0.96);
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 300;
+    letter-spacing: 0.18em; color: var(--gold-light);
+    text-transform: uppercase; text-decoration: none;
+  }
+  .nav-back { font-size: 0.75rem; color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+  .nav-back:hover { color: var(--gold-light); }
+
+  .hero {
+    background: var(--charcoal);
+    padding: 56px 32px 48px; text-align: center;
+  }
+  .hero-label { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; color: var(--white); line-height: 1.15; }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { margin-top: 14px; font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .category { margin-bottom: 36px; }
+  .category-title {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+  .item-card {
+    border: 1.5px solid rgba(30,30,30,0.12);
+    background: var(--white);
+    padding: 16px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    user-select: none;
+    text-align: center;
+  }
+  .item-card:hover { border-color: var(--gold); }
+  .item-card.selected { border-color: var(--gold); background: rgba(184,151,90,0.08); }
+  .item-card.selected::after {
+    content: '✓';
+    position: absolute; top: 8px; right: 10px;
+    font-size: 0.85rem; color: var(--gold); font-weight: 700;
+  }
+  .item-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .item-name { font-size: 0.82rem; font-weight: 500; color: var(--charcoal); }
+
+  .qty-row {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .item-card.selected .qty-row { display: flex; }
+  .qty-btn {
+    width: 24px; height: 24px;
+    border: 1px solid var(--gold);
+    background: none; color: var(--gold);
+    font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .qty-btn:hover { background: var(--gold); color: var(--white); }
+  .qty-num { font-size: 0.88rem; font-weight: 500; min-width: 18px; text-align: center; }
+
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; color: var(--warm-gray); text-transform: uppercase; margin-bottom: 8px; }
+  .form-input, .form-textarea {
+    width: 100%; padding: 12px 16px;
+    border: 1.5px solid rgba(30,30,30,0.15);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; color: var(--charcoal);
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+
+  .submit-btn {
+    width: 100%; padding: 16px;
+    background: var(--gold); color: var(--white); border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.25s; margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--charcoal); }
+  .submit-btn:disabled { background: var(--warm-gray); cursor: not-allowed; }
+
+  .kakao-btn {
+    display: block; width: 100%; padding: 14px;
+    background: #FEE500; color: #000; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; text-align: center; text-decoration: none; margin-top: 12px;
+  }
+  .divider { text-align: center; font-size: 0.72rem; color: var(--warm-gray); letter-spacing: 0.1em; margin: 16px 0; }
+
+  .success-box {
+    display: none; background: var(--white);
+    border: 1.5px solid #4caf50;
+    padding: 32px; text-align: center; margin-top: 24px;
+  }
+  .success-box.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 12px; }
+  .success-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--charcoal); margin-bottom: 8px; }
+  .success-text { font-size: 0.88rem; color: var(--warm-gray); line-height: 1.7; }
+
+  .section-divider { margin-bottom: 28px; }
+  .section-divider-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--charcoal); margin-bottom: 18px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+
+  @media (max-width: 480px) {
+    .item-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<style>
+  .pw-overlay {
+    position: fixed; inset: 0;
+    background: #f8f5f0;
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 20px;
+  }
+  .pw-box { text-align: center; }
+  .pw-logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; letter-spacing: 0.18em; color: #b8975a; text-transform: uppercase; margin-bottom: 32px; }
+  .pw-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: #1e1e1e; margin-bottom: 8px; }
+  .pw-sub { font-size: 0.82rem; color: #8a8278; margin-bottom: 28px; }
+  .pw-input {
+    width: 220px; padding: 12px 18px;
+    border: 1.5px solid rgba(184,151,90,0.4);
+    background: #fff;
+    color: #1e1e1e; font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem; letter-spacing: 0.2em;
+    text-align: center; outline: none;
+    display: block; margin: 0 auto 14px;
+  }
+  .pw-input:focus { border-color: #b8975a; }
+  .pw-btn {
+    width: 220px; padding: 12px;
+    background: #b8975a; color: #fff; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .pw-btn:hover { background: #fff; color: #1e1e1e; }
+  .pw-error { font-size: 0.78rem; color: #ff6b6b; margin-top: 10px; display: none; }
+</style>
+
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-logo">Guesthouse · Queen Creek</div>
+    <div class="pw-title">게스트 전용 페이지</div>
+    <div class="pw-sub">비밀번호를 입력해 주세요</div>
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••" maxlength="10" onkeydown="if(event.key==='Enter') checkPw()">
+    <button class="pw-btn" onclick="checkPw()">입장하기</button>
+    <div class="pw-error" id="pwError">비밀번호가 틀렸어요 🔒</div>
+  </div>
+</div>
+<script>
+  (function() {
+    if (sessionStorage.getItem('guesthouse_auth') === 'ok') {
+      document.getElementById('pwOverlay').style.display = 'none';
+    }
+  })();
+  function checkPw() {
+    const val = document.getElementById('pwInput').value;
+    if (val === '5474') {
+      sessionStorage.setItem('guesthouse_auth', 'ok');
+      document.getElementById('pwOverlay').style.display = 'none';
+    } else {
+      document.getElementById('pwError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  }
+</script>
+
+
+<nav>
+  <a href="index.html" class="nav-logo">Guesthouse · Queen Creek</a>
+  <a href="index.html" class="nav-back">← 홈으로</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Guest Request</div>
+  <h1 class="hero-title">필요한 것이 있으신가요?<br><em>편하게 요청하세요</em></h1>
+  <p class="hero-sub">필요한 항목을 선택하고 요청하시면<br>최대한 빠르게 준비해 드릴게요 😊</p>
+</div>
+
+<div class="container">
+
+  <!-- 음료 -->
+  <div class="category">
+    <div class="category-title">💧 음료</div>
+    <div class="item-grid">
+      <div class="item-card" onclick="toggleItem(this)" data-item="생수">
+        <div class="item-icon">🍶</div>
+        <div class="item-name">생수</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="커피가루">
+        <div class="item-icon">☕</div>
+        <div class="item-name">커피가루</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 식품 -->
+  <div class="category">
+    <div class="category-title">🍱 식품</div>
+    <div class="item-grid">
+      <div class="item-card" onclick="toggleItem(this)" data-item="라면">
+        <div class="item-icon">🍜</div>
+        <div class="item-name">라면</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="쌀">
+        <div class="item-icon">🌾</div>
+        <div class="item-name">쌀</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="밀키트">
+        <div class="item-icon">🥘</div>
+        <div class="item-name">밀키트</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 생활용품 -->
+  <div class="category">
+    <div class="category-title">🧻 생활용품</div>
+    <div class="item-grid">
+      <div class="item-card" onclick="toggleItem(this)" data-item="화장지">
+        <div class="item-icon">🧻</div>
+        <div class="item-name">화장지</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="샴푸">
+        <div class="item-icon">🧴</div>
+        <div class="item-name">샴푸</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="컨디셔너">
+        <div class="item-icon">💆</div>
+        <div class="item-name">컨디셔너</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="바디워시">
+        <div class="item-icon">🚿</div>
+        <div class="item-name">바디워시</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="비누">
+        <div class="item-icon">🧼</div>
+        <div class="item-name">비누</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="치약">
+        <div class="item-icon">🪥</div>
+        <div class="item-name">치약</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 세탁용품 -->
+  <div class="category">
+    <div class="category-title">🧺 세탁용품</div>
+    <div class="item-grid">
+      <div class="item-card" onclick="toggleItem(this)" data-item="세탁세제">
+        <div class="item-icon">🧺</div>
+        <div class="item-name">세탁세제</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+      <div class="item-card" onclick="toggleItem(this)" data-item="섬유유연제">
+        <div class="item-icon">🌸</div>
+        <div class="item-name">섬유유연제</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(event,this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(event,this,1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 기타 -->
+  <div class="category">
+    <div class="category-title">💬 기타</div>
+    <div class="item-grid">
+      <div class="item-card" onclick="toggleItem(this)" data-item="기타 문의" style="grid-column: span 3;">
+        <div class="item-icon">✏️</div>
+        <div class="item-name">기타 문의 (아래 메모란 작성)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 정보 입력 -->
+  <div class="section-divider">
+    <div class="section-divider-title">정보 입력</div>
+    <div class="form-group">
+      <label class="form-label">이름 (방 번호)</label>
+      <input class="form-input" type="text" id="guestName" placeholder="예: 김철수 (301호)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">추가 메모 (선택사항)</label>
+      <textarea class="form-textarea" id="guestNote" placeholder="특별히 필요한 것이나 요청사항을 적어주세요"></textarea>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitRequest()">📨 이메일로 요청 보내기</button>
+  <div class="divider">또는</div>
+  <a href="https://open.kakao.com/o/srZ7luki" target="_blank" class="kakao-btn">💬 카카오톡 오픈채팅으로 바로 문의</a>
+
+  <div class="success-box" id="successBox">
+    <div class="success-icon">✅</div>
+    <div class="success-title">요청이 전송됐어요!</div>
+    <div class="success-text">최대한 빠르게 준비해 드릴게요.<br>급하신 경우 카카오톡 오픈채팅으로 연락주세요 😊</div>
+    <a href="https://open.kakao.com/o/srZ7luki" target="_blank" class="kakao-btn" style="margin-top:20px;display:inline-block;width:auto;padding:12px 28px;">💬 카카오톡으로 확인하기</a>
+  </div>
+
+</div>
+
+<script>
+  function toggleItem(card) { card.classList.toggle('selected'); }
+
+  function changeQty(e, btn, dir) {
+    e.stopPropagation();
+    const numEl = btn.parentElement.querySelector('.qty-num');
+    let qty = parseInt(numEl.textContent) + dir;
+    if (qty < 1) qty = 1;
+    if (qty > 20) qty = 20;
+    numEl.textContent = qty;
+  }
+
+  function submitRequest() {
+    const name = document.getElementById('guestName').value.trim();
+    if (!name) { alert('이름(방 번호)을 입력해 주세요!'); return; }
+
+    const selected = [];
+    document.querySelectorAll('.item-card.selected').forEach(card => {
+      const item = card.dataset.item;
+      const qtyEl = card.querySelector('.qty-num');
+      if (qtyEl && card.querySelector('.qty-row') && !card.querySelector('.qty-row[style*="none"]')) {
+        selected.push(`${item} x${qtyEl.textContent}`);
+      } else {
+        selected.push(item);
+      }
+    });
+
+    if (selected.length === 0) { alert('필요한 항목을 선택해 주세요!'); return; }
+
+    const note = document.getElementById('guestNote').value.trim();
+    const message = `[게스트 요청]\n이름/방번호: ${name}\n요청 항목:\n${selected.map(s=>'- '+s).join('\n')}\n메모: ${note||'없음'}\n시간: ${new Date().toLocaleString('ko-KR')}`;
+
+    window.location.href = `mailto:guesthousequeencreek@gmail.com?subject=[게스트요청] ${name}&body=${encodeURIComponent(message)}`;
+    document.getElementById('successBox').classList.add('show');
+    document.querySelector('.submit-btn').disabled = true;
+  }
+</script>
+</body>
+</html>
